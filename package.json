@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "dev": "vue-cli-service serve --mode development",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
@@ -11,11 +12,15 @@
   },
   "dependencies": {
     "@types/axios": "^0.14.0",
+    "@types/js-base64": "^2.3.1",
+    "@types/js-cookie": "^2.2.6",
     "@types/nprogress": "^0.2.0",
     "ant-design-vue": "^1.5.3",
     "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "core-js": "^3.6.4",
+    "js-base64": "^2.5.2",
+    "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "register-service-worker": "^1.7.1",
     "vue": "^2.6.11",
@@ -47,7 +52,9 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.0.4",
     "less-loader": "^5.0.0",
+    "node-sass": "^4.14.1",
     "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
     "typescript": "~3.8.3",
     "vue-template-compiler": "^2.6.11"
   }
