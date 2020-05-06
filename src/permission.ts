@@ -58,7 +58,6 @@ router.beforeEach(
         const permissions = await store.dispatch(GET_MENUS_REQUEST);
         const routes = filterRoutes(asyncRoutes as [], permissions);
         store.commit(SET_MENUS, routes);
-        console.log("routes", routes);
       }
       // login重定向到/
       if (to.path === "/login") {
@@ -66,14 +65,11 @@ router.beforeEach(
       } else {
         next();
       }
-      Nprogress.done();
     } else {
       if (whiteList.indexOf(to.path) < 0) {
-        next("/login");
-        Nprogress.done();
+        next(`/login?redirect=${to.path}`);
       } else {
         next();
-        Nprogress.done();
       }
     }
   }
@@ -83,4 +79,3 @@ router.afterEach(() => {
   Nprogress.done();
 });
 
-// 前端存放所有routes，后端传入roles，前端过滤routes

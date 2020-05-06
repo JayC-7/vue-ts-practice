@@ -31,7 +31,6 @@ export default {
     isLevelOneNav(data) {
       const filtered = data.children.filter((item) => !item.hidden);
 
-      console.log("isLevelOneNav", this);
       if (filtered.length > 1) {
         return false;
       } else {
@@ -69,7 +68,7 @@ export default {
       );
     } else {
       return h(
-        "a-menu-item",
+        "a-sub-menu",
         {
           props: { key: key },
         },

@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="basic-layout">
     <a-layout>
-      <a-layout-header></a-layout-header>
+      <a-layout-header>
+        <div class="logo">XXX</div>
+      </a-layout-header>
       <a-layout>
         <a-layout-sider theme="light">
           <side-nav></side-nav>
@@ -17,6 +19,7 @@
 
 <script>
 import SideNav from "../SideNav/index.vue";
+import { Base64 } from "js-base64";
 
 export default {
   name: "layout",
@@ -26,4 +29,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.basic-layout {
+  height: 100vh;
+  overflow: hidden;
+}
+</style>
+
+<style lang="scss">
+.ant-layout {
+  height: 100%;
+}
+</style>

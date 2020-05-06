@@ -1,4 +1,10 @@
-import { GET_MENUS_REQUEST, GET_MENUS_SUCCESS, GET_MENUS_FAILURE } from "../types";
+import { 
+  GET_MENUS_REQUEST, 
+  GET_MENUS_SUCCESS, 
+  GET_MENUS_FAILURE,
+  LOADING_START,
+  LOADING_END,
+} from "../types";
 import { getMenus } from "../../api/menus";
 import messages from "../../utils/messages";
 import { RouteConfig } from 'vue-router';
@@ -27,7 +33,15 @@ const mutations = {
   SET_MENUS(state: any, routes: RouteConfig) {
     state.asyncRoutes = routes;
     state.routes = constantRoutes.concat(routes);
+  },
+
+  LOADING_START(state: any) {
+    state.loading = true;
+  },
+  LOADING_END(state: any) {
+    state.loading = false;
   }
+  
 };
 
 const actions = {

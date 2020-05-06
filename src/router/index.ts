@@ -34,6 +34,7 @@ const asyncRoutes: Array<RouteConfig> = [
         component: () => import("@/views/dashboard/index.vue"),
         meta: {
           title: "Home",
+          icon: "home",
         },
       },
     ],
@@ -48,6 +49,8 @@ const asyncRoutes: Array<RouteConfig> = [
         component: () => import("@/views/About.vue"),
         meta: {
           title: "About",
+          icon: "question",
+          roles: ["admin", "user"],
         },
       },
     ],
@@ -62,6 +65,7 @@ const asyncRoutes: Array<RouteConfig> = [
         component: () => import("@/views/dashboard/index.vue"),
         meta: {
           title: "Dashboard",
+          icon: "dashboard",
         },
       },
     ],
@@ -72,7 +76,8 @@ const asyncRoutes: Array<RouteConfig> = [
     component: Layout,
     redirect: "/permission/user",
     meta: {
-      title: "Permission"
+      title: "Permission",
+      icon: "safety",
     },
     children: [
       {
@@ -80,16 +85,18 @@ const asyncRoutes: Array<RouteConfig> = [
         name: "permission_admin",
         component: () => import("@/views/permission/admin.vue"),
         meta: {
-          title: "Admin"
-        }
+          title: "Admin",
+          roles: ["admin"],
+        },
       },
       {
         path: "user",
         name: "permission_user",
         component: () => import("@/views/permission/user.vue"),
         meta: {
-          title: "User"
-        }
+          title: "User",
+          roles: ["admin", "user"],
+        },
       },
     ],
   },

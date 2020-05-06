@@ -1,4 +1,4 @@
-import { noAuthService as noAuthRequest } from "../net/request";
+import request, { noAuthService as noAuthRequest } from "../net/request";
 
 export const login = (options: any) => {
   const { username, password } = options;
@@ -9,5 +9,12 @@ export const login = (options: any) => {
       username,
       password,
     },
+  });
+};
+
+export const getUserProfile = () => {
+  return request({
+    url: "/getUserProfile",
+    method: "get"
   });
 };

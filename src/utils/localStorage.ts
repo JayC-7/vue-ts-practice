@@ -19,13 +19,13 @@ class LocalStoragePlus {
           localStorage.removeItem(name);
           return null;
         } else {
-          return item;
+          return (item && item.value) || item;
         }
       } else {
-        return item;
+        return (item && item.value) || item;
       }
     } catch {
-      return item;
+      return (item && item.value) || item;
     }
   }
 

@@ -6,13 +6,15 @@ module.exports = {
     before(app) {
       const bodyParser = require("body-parser");
 
+      const userConvert = ({ username, roles }) => ({ username, roles });
+
       app.use(bodyParser.json());
 
       app.post("/api/getMenus", (req, res) => {
         res.json({
-            code: 200,
-            success: true,
-            ...menus
+          code: 200,
+          success: true,
+          ...menus,
         });
       });
 
@@ -21,12 +23,15 @@ module.exports = {
         const hasUser = Object.keys(users).indexOf(username) > -1;
 
         if (hasUser) {
-          if (users[username] === password) {
+          if (users[username].password === password) {
             res.json({
               code: 200,
               success: true,
               message: "Login Success!!",
-              token: new Date().getTime(),
+              data: {
+                token: new Date().getTime(),
+                username: username,
+              },
             });
           } else {
             res.json({
@@ -41,6 +46,33 @@ module.exports = {
             success: false,
             message: "用户不存在",
           });
+        }
+      });
+
+      app.get("/api/getUserProfile", (req, res) => {
+        try {
+          const { authorization } = req.headers;
+          const cookies = req.headers.cookie.split(";");
+          const username = cookies
+            .filter((item) => /^username=/.test(item))[0]
+            .replace("username=", "");
+
+          if (authorization) {
+            res.json({
+              code: 200,
+              success: true,
+              data: {
+                ...userConvert(users[username]),
+              },
+            });
+          } else {
+            res.json({
+              code: 200,
+              success: false,
+            });
+          }
+        } catch (err) {
+          console.log("----------------------err", err);
         }
       });
     },
