@@ -1,40 +1,52 @@
-/** * 1. 区分外链跟页面路由 * 2. 目前只支持二级菜单（a-sub-menu存在bug） * */
+/** 
+* 1. 区分外链跟页面路由 
+* 2. 目前只支持二级菜单（a-sub-menu存在bug，若要支持递归则需将subMenu抽象定义函数式组件，例：https://www.antdv.com/components/menu-cn/#components-menu-demo-single-file-recursive-menu）
+* */
 <template>
-  <a-menu mode="inline" theme="light" style="width: 256px;text-align: left;">
-    <!-- <side-nav-item
-      v-for="data in menus"
-      :data="data"
-      :key="data.name || data.path"
-      :parent="$refs.menu"
-    ></side-nav-item> -->
-    <template v-for="data in dataList">
-      <!-- 一级菜单 -->
-      <a-menu-item v-if="!data.children" :key="data.name || data.path">
-        <router-link :to="data.path">
-          <a-icon v-if="data.meta && data.meta.icon" :type="data.meta.icon"></a-icon>
-          {{ data.meta && data.meta.title }}
-        </router-link>
-      </a-menu-item>
+  <div class="side-nav">
+    <!-- menu -->
+    <a-menu mode="inline" theme="light">
+      <template v-for="data in dataList">
+        <!-- 一级菜单 -->
+        <a-menu-item v-if="!data.children" :key="data.path">
+          <router-link :to="data.path">
+            <a-icon
+              v-if="data.meta && data.meta.icon"
+              :type="data.meta.icon"
+            ></a-icon>
+            <span>{{ data.meta && data.meta.title }}</span>
+          </router-link>
+        </a-menu-item>
 
-      <!-- 二级菜单 -->
-      <a-sub-menu v-else :key="data.name || data.path">
-        <span slot="title">
-          <a-icon v-if="data.meta && data.meta.icon" :type="data.meta.icon"></a-icon>
-          {{ data.meta && data.meta.title }}
-        </span>
-        <template v-for="subData in data.children">
-          <a-menu-item :key="subData.name || subData.path">
-            <router-link :to="subData.path">
-              <a-icon v-if="subData.meta && subData.meta.icon" :type="subData.meta.icon"></a-icon>
-              <a-icon v-else-if="data.meta && data.meta.icon" :type="data.meta.icon" style="opacity: 0;"></a-icon>
-              {{ subData.meta && subData.meta.title }}
-            </router-link>
-          </a-menu-item>
-        </template>
-      </a-sub-menu>
-
-    </template>
-  </a-menu>
+        <!-- 二级菜单 -->
+        <a-sub-menu v-else :key="data.path">
+          <span slot="title">
+            <a-icon
+              v-if="data.meta && data.meta.icon"
+              :type="data.meta.icon"
+            ></a-icon>
+            <span>{{ data.meta && data.meta.title }}</span>
+          </span>
+          <template v-for="subData in data.children">
+            <a-menu-item :key="subData.path">
+              <router-link :to="subData.path">
+                <a-icon
+                  v-if="subData.meta && subData.meta.icon"
+                  :type="subData.meta.icon"
+                ></a-icon>
+                <a-icon
+                  v-else-if="data.meta && data.meta.icon"
+                  :type="data.meta.icon"
+                  style="opacity: 0;"
+                ></a-icon>
+                <span>{{ subData.meta && subData.meta.title }}</span>
+              </router-link>
+            </a-menu-item>
+          </template>
+        </a-sub-menu>
+      </template>
+    </a-menu>
+  </div>
 </template>
 
 <script>
@@ -43,6 +55,7 @@ export default {
   name: "sideNav",
   data() {
     return {
+      collapsed: false,
       dataItem: {},
       dataList: [], // dataList若为计算属性，无法自动更新模板
     };
@@ -58,6 +71,7 @@ export default {
       });
       this.dataList = list;
     },
+
     handleNavItem(data) {
       let filtered = [];
       const temp = { ...data };
@@ -70,7 +84,7 @@ export default {
       // 若children只有一项，默认为一级菜单
       if (filtered.length === 1) {
         const item = temp.children[0];
-        if( item.path !== "" ) {
+        if (item.path !== "") {
           temp.path = `${temp.path}/${item.path}`.replace("//", "/");
         }
         temp.meta = item.meta;
@@ -85,6 +99,10 @@ export default {
 
       return temp;
     },
+
+    toggleCollapsed() {
+      this.$emit("onCollapse");
+    },
   },
   computed: {
     ...mapGetters({
@@ -94,10 +112,40 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="less" scoped>
+.side-nav {
+  position: relative;
+  width: 256px;
+  height: 100%;
+  text-align: left;
+  /deep/ .ant-menu-inline-collapsed > .ant-menu-item,
+  /deep/
+    .ant-menu-inline-collapsed
+    > .ant-menu-item-group
+    > .ant-menu-item-group-list
+    > .ant-menu-item,
+  /deep/
+    .ant-menu-inline-collapsed
+    > .ant-menu-item-group
+    > .ant-menu-item-group-list
+    > .ant-menu-submenu
+    > .ant-menu-submenu-title,
+  /deep/
+    .ant-menu-inline-collapsed
+    > .ant-menu-submenu
+    > .ant-menu-submenu-title {
+    padding: 0 24px !important;
+  }
+}
+</style>
+
+<style lang="less">
 .ant-menu {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+.ant-menu-inline-collapsed {
+  width: 64px !important;
 }
 </style>
